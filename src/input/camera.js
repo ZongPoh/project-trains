@@ -36,14 +36,15 @@ export function orbitBy(dx, dy) { cam.yaw -= dx * 0.006; cam.pitch += dy * 0.005
 export function zoomBy(factor) { cam.dist *= factor; }
 
 // Normally the view is shifted up a little to leave room for the depot along the bottom.
-// While riding a train the depot is hidden, so the shift is turned off.
-let viewShift = true;
+// While riding a train, or when the player has hidden the depot, the shift is turned off.
+let viewShift = true, depotRoom = true;
 export function setViewShift(on) { viewShift = on; resize(); }
+export function setDepotRoom(on) { depotRoom = on; resize(); }
 
 export function resize() {
   const w = canvas.clientWidth || 1, h = canvas.clientHeight || 1;
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
-  if (viewShift) camera.setViewOffset(w, h, 0, Math.round(h * 0.08), w, h); else camera.clearViewOffset();
+  if (viewShift && depotRoom) camera.setViewOffset(w, h, 0, Math.round(h * 0.08), w, h); else camera.clearViewOffset();
   camera.updateProjectionMatrix();
 }

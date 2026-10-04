@@ -7,7 +7,6 @@ import { $, fatal, toast } from './core/dom.js';
 import { on, emit } from './core/events.js';
 import { trainDef } from './trains/index.js';
 import { stationName } from './tracks/features/station.js';
-import { tuneFor } from './audio/sounds/chime.js';
 import { setHighway, isHighway, rampOf, highway } from './terrain/highway.js';
 import { placeScenery, walkLinks, sceneryAt } from './scenery/placed.js';
 import { setTerrain } from './terrain/model.js';
@@ -44,6 +43,7 @@ import { initKeyboard, stepKeyboard } from './input/keyboard.js';
 import { setTool, setLevel } from './tools/index.js';
 import { buildDepot } from './ui/depot.js';
 import { initMenu, setPaused, showSettings } from './ui/menu.js';
+import { initPanels } from './ui/panels.js';
 import { initAudio, stepAudio } from './audio/index.js';
 import { load, starter, clearWorld, serialize } from './save/layout.js';
 import { readSaved, updateStats, changed, snapshot } from './save/history.js';
@@ -60,7 +60,7 @@ import { layoutFromAddress, clearAddress } from './save/share.js';
 //   roads/    level crossing gates, and the cars that drive on the roads
 //   input/    mouse, touch, wheel, keyboard and the camera
 //   tools/    one file per tool
-//   ui/       the depot and the buttons
+//   ui/       the depot, the buttons, and hiding the plates
 //   audio/    sound, one file per kind of sound
 //   save/     saving, undo and share links
 
@@ -108,7 +108,7 @@ async function start() {
   $('btn-time').textContent = 'Time of day: ' + restoreTime().label;
   resize(); resetCam();
   if (window.ResizeObserver) new ResizeObserver(resize).observe(canvas); else window.addEventListener('resize', resize);
-  initPointer(); initObstacles(); initWheel(); initKeyboard(); initMenu(); initAudio(); initRideBar(); initPassengers(); initBoard(); showSettings();
+  initPointer(); initObstacles(); initWheel(); initKeyboard(); initMenu(); initPanels(); initAudio(); initRideBar(); initPassengers(); initBoard(); showSettings();
   onSeason(() => { for (const p of pieces) if (p.st) dirty.add(p); });      // snow on the station roofs
   buildDepot();
 
@@ -142,4 +142,4 @@ async function start() {
 if (ok) start(); else fatal();
 
 // Handy while developing: look at the game from the browser console.
-if (import.meta.env.DEV) window.PT = { walkLinks, sceneryAt, peopleCount, strollers, walkerList, turnRound: tr => { reverseTrain(tr, false); placeCars(tr); }, simulate, on, emit, carsOnHighway, carList, setHighway, isHighway, rampOf, highway, placeScenery, setTerrain, trainDef, stationName, tuneFor, state, settings, trains, pieces, ringing: ringingCrossings, carCount, startRide, stopRide, nextView, flushTerrain, stepCrossings, stepCars, stepPassengers, stepGrowth, applyRide, spawnTrain, splitTrain, cam, camera, canvas, renderer, scene, serialize, load, starter, clearWorld, stepTrain, checkCollisions, stepCrashes, flush };
+if (import.meta.env.DEV) window.PT = { walkLinks, sceneryAt, peopleCount, strollers, walkerList, turnRound: tr => { reverseTrain(tr, false); placeCars(tr); }, simulate, on, emit, carsOnHighway, carList, setHighway, isHighway, rampOf, highway, placeScenery, setTerrain, trainDef, stationName, state, settings, trains, pieces, ringing: ringingCrossings, carCount, startRide, stopRide, nextView, flushTerrain, stepCrossings, stepCars, stepPassengers, stepGrowth, applyRide, spawnTrain, splitTrain, cam, camera, canvas, renderer, scene, serialize, load, starter, clearWorld, stepTrain, checkCollisions, stepCrashes, flush };

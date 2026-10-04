@@ -7,8 +7,8 @@ import { isStation, stationRun, stationPieces, stationAcross, platformSpot, plat
 import { trains } from '../trains/store.js';
 
 // Station staff.
-//   Every platform has a conductor in a dark uniform and white gloves. When the departure melody
-//   starts, the conductor points at the train to check the doors; as it pulls out, the arm goes
+//   Every platform has a conductor in a dark uniform and white gloves. Just before a train
+//   leaves, the conductor points at it to check the doors; as it pulls out, the arm goes
 //   straight up.
 //   A terminal (four tracks or more) also has a cleaning crew of three on each platform. They bow
 //   to the train as it comes in, go aboard to clean while it stands, and bow again as it leaves.
@@ -105,7 +105,7 @@ export function stepStaff(dt) {
   }
   for (const s of staff.values()) {
     const t = at.get(s.run), standing = t && t.wait > 0;
-    // the conductor: point along the train during the melody, arm up as it leaves
+    // the conductor: point along the train just before it leaves, arm up as it goes
     const want = !t ? 0 : standing ? (t.sung ? 1.5 : 0) : 2.9;
     s.lift = ease(s.lift, want, dt, 7);
     s.arm.rotation.x = -s.lift;

@@ -4,9 +4,13 @@ const STORE = 'project-trains.settings.v1';
 export const settings = {
   time: 'day',        // day, sunset or night
   sound: true,
+  music: true,        // the background music; Sound off silences it too
   careful: true,      // drivers watch for other trains; off means trains can crash
   season: 'spring',   // spring, summer, autumn or winter
   growth: true,       // busy stations grow new buildings
+  showDepot: true,    // the three plates that can be hidden: the depot along the bottom,
+  showTools: true,    // the tools down the left
+  showLevels: true,   // and the level stack on the right
 };
 
 try { Object.assign(settings, JSON.parse(localStorage.getItem(STORE) || '{}')); } catch (e) { /* first visit, or storage blocked */ }

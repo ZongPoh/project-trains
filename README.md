@@ -99,14 +99,18 @@ Click a tool button or press its key.
 | Turn a ramp or a large building | `R` |
 | Pause | `Space` (with the board focused) |
 | Undo | `Ctrl+Z` |
+| Hide or show the depot, the tools and the level buttons | The small arrow button on each, or `P` for all three |
+
+A hidden panel shrinks to a small button (Depot, Tools, Level) that brings it back; the game
+remembers which ones you hid. Tool and level keys still work while the panels are hidden.
 
 Tilt the view down low to see the sky and the mountain. The camera rises over hills,
 buildings, stations and viaducts instead of passing through them.
 
 ### The More menu
 
-Reset camera, time of day (day, sunset, night), season, sound on or off, careful or reckless
-drivers, town growth on or off, departure board on or off, copy a share link, remove all
+Reset camera, time of day (day, sunset, night), season, sound on or off, music on or off,
+careful or reckless drivers, town growth on or off, departure board on or off, copy a share link, remove all
 trains, load the starter layout, clear the board.
 
 ### The departure board
@@ -181,13 +185,10 @@ platform tracks lie side by side:
 - **People walk**: passengers walk in along the platform to their place in the queue, walk
   from the queue into the train when it stops, and those getting off walk away along the
   platform.
-- **Station staff**: every platform has a conductor, who points at the train while the
-  departure melody plays and raises an arm as it leaves. A terminal also has a cleaning crew
+- **Station staff**: every platform has a conductor, who points at the train just before it
+  leaves, blows a whistle and raises an arm as it pulls out. A terminal also has a cleaning crew
   on each platform: they bow as the train comes in, go aboard while it stands (seven seconds
   rather than the usual three and a half), and bow again as it leaves.
-- **Departure melodies**: every station name has its own short tune, composed by the game
-  from the letters of the name. It plays just before the train leaves, followed by the
-  conductor's whistle.
 
 ### Train services
 
@@ -293,10 +294,16 @@ Every train runs one of three services. Change it by clicking the train with Ope
   Trees, ground, rice fields, hills and the mountain's snow line change, snow lies on the
   roofs in winter, and petals, leaves or snow drift through the air.
 - **Night**: at sunset and night, train, station and building windows light up.
-- **Sound**: running noise (deeper in a tunnel, with a hollow thump on a bridge), arrival
-  chimes, departure melodies, the conductor's whistle, the crossing bell, bus doors, crashes
-  and clicks are all generated in the browser; there are no sound files. Sound starts after
-  your first click.
+- **Sound**: running noise (deeper in a tunnel, with a hollow thump on a bridge), the
+  conductor's whistle, the crossing bell, bus doors, crashes and clicks are all generated in
+  the browser; there are no sound files. Sound starts after your first click.
+- **Hearing**: a sound on the board is only heard when the camera is close to it: at full
+  strength within 12 squares of the camera, fading to nothing at 34. From far off the city is
+  silent; fly down to a station or ride a train to hear it. The sounds of your own tools are
+  always heard.
+- **Music** (More menu): a slow piece for koto and bamboo flute in a Japanese scale. The tune
+  was written for this game and the instruments are generated in the browser, so there is no
+  recording and no existing melody in it. It plays wherever the camera is.
 
 ## Saving and sharing
 
@@ -405,7 +412,9 @@ src/
     track.js  ramp.js  station.js  signal.js  operate.js  erase.js  train.js  scenery.js  look.js  ride.js
     road.js  river.js  hill.js  (all three built on ground.js)  highway.js
   ui/                      depot.js  menu.js  ridebar.js  board.js (the departure board)
-  audio/                   engine.js, and sounds/ with one file per kind of sound
+                           panels.js (hiding the depot, the tools and the level buttons)
+  audio/                   engine.js, hearing.js (what the camera can hear), music.js,
+                           and sounds/ with one file per kind of sound
   save/                    layout.js  history.js  share.js  starter.js (the starter layout)
 ```
 

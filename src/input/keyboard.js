@@ -8,10 +8,11 @@ import { turnScenery } from '../tools/scenery.js';
 import { hover } from '../tools/strokes.js';
 import { undo } from '../save/history.js';
 import { setPaused } from '../ui/menu.js';
+import { toggleAllPanels } from '../ui/panels.js';
 
 // Keyboard shortcuts.
 //   1-9 tools, 0 road, - river, = hill, H highway · R turn ramp · [ ] or PageUp/PageDown change level · Space pause (board focused)
-//   W A S D or arrows move the view · Q E turn it · Ctrl+Z undo
+//   W A S D or arrows move the view · Q E turn it · Ctrl+Z undo · P hide or show the depot, tools and levels
 //   while riding: V changes the view · N next train · Esc leaves
 const TOOL_KEYS = { Digit1: 'track', Digit2: 'rampup', Digit3: 'rampdown', Digit4: 'station', Digit5: 'signal', Digit6: 'operate', Digit7: 'erase', Digit8: 'look', Digit9: 'ride', Digit0: 'road', Minus: 'river', Equal: 'hill', KeyH: 'highway' };
 const held = new Set();
@@ -36,6 +37,7 @@ function keydown(e) {
   else if (k === 'BracketRight' || k === 'PageUp') { e.preventDefault(); setLevel(state.level + 1); }
   else if (k === 'BracketLeft' || k === 'PageDown') { e.preventDefault(); setLevel(state.level - 1); }
   else if (k === 'Space' && e.target === canvas) { e.preventDefault(); setPaused(!state.paused); }
+  else if (k === 'KeyP') { if (!e.repeat) toggleAllPanels(); }
   else if (/^(Key[WASDQE]|Arrow(Up|Down|Left|Right))$/.test(k)) { held.add(k); if (k.startsWith('Arrow')) e.preventDefault(); }
 }
 

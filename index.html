@@ -31,6 +31,7 @@
           <button class="btn" id="btn-time" type="button">Time of day: Day</button>
           <button class="btn" id="btn-season" type="button">Season: Spring</button>
           <button class="btn" id="btn-sound" type="button">Sound: On</button>
+          <button class="btn" id="btn-music" type="button">Music: On</button>
           <button class="btn" id="btn-drive" type="button">Drivers: Careful</button>
           <button class="btn" id="btn-growth" type="button">Town growth: On</button>
           <button class="btn" id="btn-board" type="button">Departure board: On</button>
@@ -43,6 +44,7 @@
     </div>
 
     <nav class="plate tools" aria-label="Build tools">
+      <button class="fold" id="fold-tools" type="button" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span>Hide</span></button>
       <button class="tool" type="button" data-tool="track" aria-pressed="true" title="Track (1)">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v18M16 3v18M4 7h16M4 12h16M4 17h16"/></svg><span>Track</span><kbd>1</kbd>
       </button>
@@ -85,6 +87,7 @@
     </nav>
 
     <div class="plate levels" role="group" aria-label="Build level">
+      <button class="fold" id="fold-levels" type="button" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span>Hide</span></button>
       <span class="cap">Level</span>
       <button class="lvl" type="button" data-level="3" aria-pressed="false" title="Level 3">3</button>
       <button class="lvl" type="button" data-level="2" aria-pressed="false" title="Level 2">2</button>
@@ -113,7 +116,8 @@
             <button class="tab" id="tab-trains" type="button" role="tab" aria-selected="true" aria-controls="cards-trains">Trains</button>
             <button class="tab" id="tab-scenery" type="button" role="tab" aria-selected="false" aria-controls="cards-scenery">Scenery</button>
           </div>
-          <label class="speed" id="speed-wrap" for="speed">Speed <input type="range" id="speed" min="0.25" max="3" step="0.25" value="1"><output id="speed-out" for="speed">1×</output></label>
+          <label class="speed" id="speed-wrap" for="speed"><span class="only-wide">Speed</span><input type="range" id="speed" aria-label="Speed" min="0.25" max="3" step="0.25" value="1"><output id="speed-out" for="speed">1×</output></label>
+          <button class="fold" id="fold-depot" type="button" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span>Hide</span></button>
         </div>
         <div class="cards" id="cards-trains" role="tabpanel" aria-labelledby="tab-trains"></div>
         <div class="cards" id="cards-scenery" role="tabpanel" aria-labelledby="tab-scenery" hidden></div>

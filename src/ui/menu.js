@@ -12,7 +12,7 @@ import { shareLink } from '../save/share.js';
 import { nextTime } from '../scenery/daylight.js';
 import { nextSeason, seasonLook } from '../scenery/seasons.js';
 import { settings, saveSettings } from '../core/settings.js';
-import { setSound } from '../audio/index.js';
+import { setSound, setMusic } from '../audio/index.js';
 
 // The buttons round the edge of the board: tools, levels, run controls and the More menu.
 
@@ -25,6 +25,7 @@ const closeMenu = () => { $('menu').open = false; };
 
 export function showSettings() {
   $('btn-sound').textContent = 'Sound: ' + (settings.sound ? 'On' : 'Off');
+  $('btn-music').textContent = 'Music: ' + (settings.music ? 'On' : 'Off');
   $('btn-drive').textContent = 'Drivers: ' + (settings.careful ? 'Careful' : 'Reckless');
   $('btn-season').textContent = 'Season: ' + seasonLook().label;
   $('btn-growth').textContent = 'Town growth: ' + (settings.growth ? 'On' : 'Off');
@@ -59,6 +60,7 @@ export function initMenu() {
   });
   $('btn-share').addEventListener('click', share);
   $('btn-sound').addEventListener('click', () => { setSound(!settings.sound); showSettings(); });
+  $('btn-music').addEventListener('click', () => { setMusic(!settings.music); showSettings(); });
   $('btn-drive').addEventListener('click', () => {
     settings.careful = !settings.careful; saveSettings(); showSettings();
     toast(settings.careful ? 'Careful drivers: trains wait for each other.' : 'Reckless drivers: trains ignore each other and can crash.');

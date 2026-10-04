@@ -84,6 +84,22 @@ button:disabled{opacity:.38;cursor:not-allowed}
 .lvl:hover{background:var(--plate-2)}
 .lvl[aria-pressed="true"]{background:var(--amber);color:var(--on-amber);border-bottom-color:transparent}
 
+/* fold buttons: the depot, the tools and the level stack can each be hidden. The plate shrinks
+   to this button, which brings it back. The chevron points the way the plate goes. */
+.fold{display:flex;align-items:center;justify-content:center;gap:3px;flex:none;height:24px;padding:0 6px;border-radius:4px;font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+.fold:hover{background:var(--plate-2);color:var(--ink)}
+.fold svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.tools .fold{grid-column:1 / -1}
+.tools .fold svg{transform:rotate(90deg)}
+.levels .fold svg{transform:rotate(-90deg)}
+.levels .fold span{display:none}
+#ui.tools-off .tools{display:flex}
+#ui.tools-off .tool,#ui.levels-off .lvl,#ui.levels-off .cap{display:none}
+#ui.tools-off .tools .fold{flex-direction:row-reverse}
+#ui.tools-off .tools .fold svg{transform:rotate(-90deg)}
+#ui.levels-off .levels .fold svg{transform:rotate(90deg)}
+#ui.tools-off .tools .fold span,#ui.levels-off .levels .fold span{display:inline}
+
 /* departure board: a dark panel with lit lettering, like the board in a station hall */
 .board{grid-column:2;grid-row:2;justify-self:end;align-self:start;width:372px;max-width:100%;background:#0e1519;color:#f2f0e4;border:1px solid rgba(0,0,0,.5);border-radius:6px;box-shadow:var(--shadow);padding:6px 6px 5px;font-variant-numeric:tabular-nums}
 .board header{display:flex;align-items:baseline;gap:8px;padding:0 6px 5px;border-bottom:1px solid rgba(242,240,228,.16)}
@@ -117,12 +133,19 @@ button:disabled{opacity:.38;cursor:not-allowed}
 .hintbar span{min-width:0}
 .hintbar .btn{height:28px;padding:0 10px;background:var(--plate-2)}
 .depot{max-width:100%;min-width:0;padding:6px 6px 6px}
-.depot-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 6px 5px;min-height:30px}
+.depot-head{display:flex;align-items:center;gap:16px;padding:0 6px 5px;min-height:30px}
+.depot-head .fold{flex-direction:row-reverse;height:28px;margin-left:auto}
+.depot-head .speed:not([hidden]) + .fold{margin-left:0}
+#ui.depot-off .depot{padding:4px}
+#ui.depot-off .depot-head{padding:0;min-height:0}
+#ui.depot-off .tabs,#ui.depot-off .speed,#ui.depot-off .cards{display:none}
+#ui.depot-off .depot .fold{margin-left:0}
+#ui.depot-off .depot .fold svg{transform:rotate(180deg)}
 .tabs{display:flex;gap:2px}
 .tab{height:28px;padding:0 10px;border-radius:4px;font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:3px solid transparent}
 .tab:hover{background:var(--plate-2)}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--signal)}
-.speed{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-weight:500}
+.speed{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-weight:500}
 .speed input{width:110px;accent-color:var(--signal)}
 .speed output{min-width:2.6em;font-variant-numeric:tabular-nums;color:var(--ink)}
 .cards{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 4px;scrollbar-width:thin}
@@ -141,22 +164,27 @@ button:disabled{opacity:.38;cursor:not-allowed}
   .brand h1{font-size:16px}
   .brand p{font-size:11px}
   .brand-in{padding:4px 8px 5px}
-  .tool span,.tool kbd{display:none}
+  .tool span,.tool kbd,.tools .fold span{display:none}
   .tool{width:40px;height:34px;justify-content:center;padding:0}
   .btn,.menu summary{padding:0 8px}
   .card{width:128px}
   .card small{display:none}
   .hintbar{font-size:12.5px}
   .ridebar kbd{display:none}
-  .speed input{width:84px}
+  .speed{min-width:0;flex:0 1 auto}
+  .speed input{width:72px;min-width:36px;flex:0 1 72px}
   .only-wide{display:none}
+  .depot-head{gap:8px}
+  .tab{padding:0 6px}
+  .depot-head .fold span{display:none}
+  #ui.depot-off .depot .fold span{display:inline}
   .board{grid-column:1 / -1;grid-row:2;justify-self:center;width:340px;font-size:12.5px}
 }
 /* not much height (most laptops): the tools become a two-column grid of icons */
 @media (max-height:880px) and (min-width:721px){
   .tools{display:grid;grid-template-columns:repeat(2,40px);gap:2px}
   .tool{width:40px;height:36px;justify-content:center;padding:0}
-  .tool span,.tool kbd{display:none}
+  .tool span,.tool kbd,.tools .fold span{display:none}
 }
 @media (max-height:560px){
   .hintbar{display:none}

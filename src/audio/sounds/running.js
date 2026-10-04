@@ -1,10 +1,12 @@
 import { state } from '../../core/state.js';
 import { trains } from '../../trains/store.js';
 import { isHill, isWater } from '../../terrain/model.js';
-import { context, ready, nearness, noise, tone, noiseLoop } from '../engine.js';
+import { context, ready, noise, tone, noiseLoop } from '../engine.js';
+import { heard } from '../hearing.js';
 
-// Trains on the move: a rushing hum that rises with speed, and the clack of wheels over
-// rail joints. Loudness follows the trains nearest the middle of the view.
+// Trains on the move: a low rushing hum that rises with speed, and the clack of wheels over
+// rail joints. Only trains within earshot of the camera are heard (see hearing.js). The hum is
+// made from the soft noise (see noiseLoop in engine.js), so it does not hiss.
 //   In a tunnel the sound closes in: lower, louder, with a deep roar underneath.
 //   On a bridge the clacks come with a hollow thump from the deck.
 let rush = null, roar = null, phase = 0;
@@ -19,17 +21,17 @@ function placeOf(t) {
 
 export function stepRunning(dt) {
   if (!ready()) return;
-  if (!rush) { rush = noiseLoop('bandpass', 500, 0.8); roar = noiseLoop('lowpass', 150, 1.2); }
+  if (!rush) { rush = noiseLoop('bandpass', 500, 0.8, true); roar = noiseLoop('lowpass', 150, 1.2); }
   let loud = 0, fastest = 0, near = 0, place = '';
   if (!state.paused) for (const t of trains) {
     if (t.state !== 'run' || t.v < 0.05) continue;
-    const p = t.cars[0].mesh.position, n = nearness(p.x, p.z), w = (t.v / 5) * n;
+    const p = t.cars[0].mesh.position, n = heard(p.x, p.z, p.y), w = (t.v / 5) * n;
     loud += w;
     if (w > near) { near = w; fastest = t.v; place = placeOf(t); }
   }
   const now = context().currentTime, tunnel = place === 'tunnel';
   rush.gain.gain.setTargetAtTime(Math.min(0.2, loud * 0.085) * (tunnel ? 1.25 : 1), now, 0.12);
-  rush.filter.frequency.setTargetAtTime(tunnel ? 210 + fastest * 60 : 320 + fastest * 150, now, 0.15);
+  rush.filter.frequency.setTargetAtTime(tunnel ? 130 + fastest * 40 : 200 + fastest * 70, now, 0.15);
   roar.gain.gain.setTargetAtTime(tunnel ? Math.min(0.34, near * 0.3) : 0, now, tunnel ? 0.08 : 0.25);
 
   phase += fastest * state.simSpeed * dt * 0.9;                 // one rail joint every so many squares
