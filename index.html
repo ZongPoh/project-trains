@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Project Trains</title>
+<meta name="description" content="A virtual toy-train city in Japan: lay track, build stations and signals, and run Shinkansen past sakura and a snow-capped mountain.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow+Semi+Condensed:wght@400;500;600;700&display=swap">
+</head>
+<body>
+<div id="app">
+  <canvas id="view" tabindex="0" aria-label="3D layout board. Lay track, build stations and place trains."></canvas>
+
+  <div id="ui">
+    <header class="brand">
+      <div class="brand-in">
+        <h1>Project Trains</h1>
+        <p><span id="stat-track">0</span> track pieces · <span id="stat-trains">0</span> trains<span id="stat-pax" hidden></span><span id="stat-crashes" hidden></span></p>
+      </div>
+    </header>
+
+    <div class="plate run">
+      <button class="btn" id="btn-pause" type="button">Pause</button>
+      <button class="btn" id="btn-undo" type="button" disabled>Undo</button>
+      <details class="menu" id="menu">
+        <summary>More</summary>
+        <div class="plate menu-list">
+          <button class="btn" id="btn-view" type="button">Reset camera</button>
+          <button class="btn" id="btn-time" type="button">Time of day: Day</button>
+          <button class="btn" id="btn-season" type="button">Season: Spring</button>
+          <button class="btn" id="btn-sound" type="button">Sound: On</button>
+          <button class="btn" id="btn-drive" type="button">Drivers: Careful</button>
+          <button class="btn" id="btn-growth" type="button">Town growth: On</button>
+          <button class="btn" id="btn-board" type="button">Departure board: On</button>
+          <button class="btn" id="btn-share" type="button">Copy share link</button>
+          <button class="btn" id="btn-trains" type="button">Remove all trains</button>
+          <button class="btn" id="btn-starter" type="button">Load starter layout</button>
+          <button class="btn" id="btn-clear" type="button">Clear the board</button>
+        </div>
+      </details>
+    </div>
+
+    <nav class="plate tools" aria-label="Build tools">
+      <button class="tool" type="button" data-tool="track" aria-pressed="true" title="Track (1)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v18M16 3v18M4 7h16M4 12h16M4 17h16"/></svg><span>Track</span><kbd>1</kbd>
+      </button>
+      <button class="tool" type="button" data-tool="rampup" aria-pressed="false" title="Ramp up (2)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18V9L3 20zM7 9l3-3 3 3M10 6v7"/></svg><span>Ramp up</span><kbd>2</kbd>
+      </button>
+      <button class="tool" type="button" data-tool="rampdown" aria-pressed="false" title="Ramp down (3)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 20H3V9l18 11zM11 7l3 3 3-3M14 10V3"/></svg><span>Ramp down</span><kbd>3</kbd>
+      </button>
+      <button class="tool" type="button" data-tool="station" aria-pressed="false" title="Station (4)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 10l10-5 10 5M5 10v10M19 10v10M2 20h20M9 20v-5h6v5"/></svg><span>Station</span><kbd>4</kbd>
+      </button>
+      <button class="tool" type="button" data-tool="signal" aria-pressed="false" title="Signal (5)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="13" rx="2"/><circle cx="12" cy="6" r="1.4"/><circle cx="12" cy="11" r="1.4"/><path d="M12 15v7M8 22h8"/></svg><span>Signal</span><kbd>5</kbd>
+      </button>
+      <button class="tool" type="button" data-tool="operate" aria-pressed="false" title="Operate switches and signals (6)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22V13M12 13L6 3M12 13c0-5 3-7 6-10"/><circle cx="12" cy="13" r="1.6"/></svg><span>Operate</span><kbd>6</kbd>
+      </button>
+      <button class="tool" type="button" data-tool="erase" aria-pressed="false" title="Erase (7)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg><span>Erase</span><kbd>7</kbd>
+      </button>
+      <button class="tool" type="button" data-tool="look" aria-pressed="false" title="Look around (8)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Look around</span><kbd>8</kbd>
+      </button>
+      <button class="tool" type="button" data-tool="ride" aria-pressed="false" title="Ride a train (9)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12a2 2 0 0 1 2 2v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V5a2 2 0 0 1 2-2zM4 10h16M8 21l2-3M16 21l-2-3"/><circle cx="8.5" cy="14" r="1"/><circle cx="15.5" cy="14" r="1"/></svg><span>Ride</span><kbd>9</kbd>
+      </button>
+      <button class="tool" type="button" data-tool="road" aria-pressed="false" title="Road (0)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3L4 21M17 3l3 18M12 4v3M12 10.5v3M12 17v3"/></svg><span>Road</span><kbd>0</kbd>
+      </button>
+      <button class="tool" type="button" data-tool="river" aria-pressed="false" title="River (-)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8c2.5-2 4.5-2 7 0s4.500 2 7 0 4.500-2 6 0M2 13c2.5-2 4.500-2 7 0s4.500 2 7 0 4.500-2 6 0M2 18c2.500-2 4.500-2 7 0s4.500 2 7 0 4.500-2 6 0"/></svg><span>River</span><kbd>-</kbd>
+      </button>
+      <button class="tool" type="button" data-tool="hill" aria-pressed="false" title="Hill (=)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20l7-12 4 6 2-3 7 9zM13 20v-3a2 2 0 0 1 4 0v3"/></svg><span>Hill</span><kbd>=</kbd>
+      </button>
+      <button class="tool" type="button" data-tool="highway" aria-pressed="false" title="Highway (H)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9h20M2 13h20M6 13v8M18 13v8M5 11h3M10.500 11h3M16 11h3"/></svg><span>Highway</span><kbd>H</kbd>
+      </button>
+    </nav>
+
+    <div class="plate levels" role="group" aria-label="Build level">
+      <span class="cap">Level</span>
+      <button class="lvl" type="button" data-level="3" aria-pressed="false" title="Level 3">3</button>
+      <button class="lvl" type="button" data-level="2" aria-pressed="false" title="Level 2">2</button>
+      <button class="lvl" type="button" data-level="1" aria-pressed="false" title="Level 1">1</button>
+      <button class="lvl" type="button" data-level="0" aria-pressed="true" title="Ground">G</button>
+    </div>
+
+    <section class="board" id="board" aria-label="Departure board" hidden>
+      <header><b>Departures</b><span lang="ja">発車案内</span><i>Platform</i></header>
+      <div id="board-rows"></div>
+      <p id="board-empty">No trains running.</p>
+    </section>
+
+    <div class="plate ridebar" id="ridebar" hidden>
+      <span id="ride-name"></span>
+      <button class="btn" id="ride-view" type="button">Change view <kbd>V</kbd></button>
+      <button class="btn" id="ride-next" type="button">Next train <kbd>N</kbd></button>
+      <button class="btn" id="ride-leave" type="button">Leave <kbd>Esc</kbd></button>
+    </div>
+
+    <div class="bottom">
+      <div class="plate hintbar"><span id="hint"></span><button class="btn" id="btn-rot" type="button" hidden>Turn ramp</button></div>
+      <section class="plate depot" aria-label="Depot">
+        <div class="depot-head">
+          <div class="tabs" role="tablist" aria-label="Depot shelves">
+            <button class="tab" id="tab-trains" type="button" role="tab" aria-selected="true" aria-controls="cards-trains">Trains</button>
+            <button class="tab" id="tab-scenery" type="button" role="tab" aria-selected="false" aria-controls="cards-scenery">Scenery</button>
+          </div>
+          <label class="speed" id="speed-wrap" for="speed">Speed <input type="range" id="speed" min="0.25" max="3" step="0.25" value="1"><output id="speed-out" for="speed">1×</output></label>
+        </div>
+        <div class="cards" id="cards-trains" role="tabpanel" aria-labelledby="tab-trains"></div>
+        <div class="cards" id="cards-scenery" role="tabpanel" aria-labelledby="tab-scenery" hidden></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+  <div class="fatal" id="fatal" hidden><div class="plate"><b>The 3D board could not start.</b><br><span id="fatal-msg">This browser or device has 3D graphics turned off. Try opening the page in a desktop browser.</span></div></div>
+</div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "project-trains",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A virtual toy-train layout board: lay track, build ramps across four levels and run trains.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "0.128.0"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}
